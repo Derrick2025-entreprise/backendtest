@@ -1,0 +1,2001 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Suivi Académique",
+        "description": "Documentation de l'API pour le suivi académique",
+        "contact": {
+            "email": "contact@suivi-academique.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Serveur API"
+        }
+    ],
+    "paths": {
+        "/api/ec": {
+            "get": {
+                "tags": [
+                    "ECs"
+                ],
+                "summary": "Obtenir la liste des EC",
+                "description": "Retourne la liste de toutes les EC avec leur UE associée",
+                "operationId": "getECList",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code_ec": {
+                                                "type": "integer"
+                                            },
+                                            "label_ec": {
+                                                "type": "string"
+                                            },
+                                            "description_ec": {
+                                                "type": "string"
+                                            },
+                                            "nb_heures_ec": {
+                                                "type": "integer"
+                                            },
+                                            "nb_credits_ec": {
+                                                "type": "integer"
+                                            },
+                                            "code_ue": {
+                                                "type": "string"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ECs"
+                ],
+                "summary": "Créer un nouvel EC",
+                "description": "Crée un EC et retourne un message de confirmation",
+                "operationId": "storeEC",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "label_ec",
+                                    "description_ec",
+                                    "nb_heures_ec",
+                                    "nb_credits_ec",
+                                    "code_ue"
+                                ],
+                                "properties": {
+                                    "label_ec": {
+                                        "type": "string",
+                                        "minLength": 3
+                                    },
+                                    "description_ec": {
+                                        "type": "string"
+                                    },
+                                    "nb_heures_ec": {
+                                        "type": "integer"
+                                    },
+                                    "nb_credits_ec": {
+                                        "type": "integer"
+                                    },
+                                    "code_ue": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "EC créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ec/{codeEC}": {
+            "get": {
+                "tags": [
+                    "ECs"
+                ],
+                "summary": "Obtenir un EC",
+                "description": "Retourne les détails d'un EC",
+                "operationId": "showEC",
+                "parameters": [
+                    {
+                        "name": "codeEC",
+                        "in": "path",
+                        "description": "Code de l'EC",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "EC non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ECs"
+                ],
+                "summary": "Modifier un EC",
+                "description": "Modifie un EC existant",
+                "operationId": "updateEC",
+                "parameters": [
+                    {
+                        "name": "codeEC",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "label_ec": {
+                                        "type": "string"
+                                    },
+                                    "description_ec": {
+                                        "type": "string"
+                                    },
+                                    "nb_heures_ec": {
+                                        "type": "integer"
+                                    },
+                                    "nb_credits_ec": {
+                                        "type": "integer"
+                                    },
+                                    "code_ue": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "EC mis à jour"
+                    },
+                    "404": {
+                        "description": "EC non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ECs"
+                ],
+                "summary": "Supprimer un EC",
+                "description": "Supprime un EC existant",
+                "operationId": "deleteEC",
+                "parameters": [
+                    {
+                        "name": "codeEC",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "EC supprimé"
+                    },
+                    "404": {
+                        "description": "EC non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/filieres": {
+            "get": {
+                "tags": [
+                    "Filières"
+                ],
+                "summary": "Obtenir la liste des filières",
+                "description": "Retourne la liste de toutes les filières avec leurs niveaux associés",
+                "operationId": "getFilieresList",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code_filiere": {
+                                                "type": "string",
+                                                "example": "INFO"
+                                            },
+                                            "label_filiere": {
+                                                "type": "string",
+                                                "example": "Informatique"
+                                            },
+                                            "description_filiere": {
+                                                "type": "string",
+                                                "example": "Filière Informatique"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "niveaux": {
+                                                "description": "Liste des niveaux associés à la filière",
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "code_niveau": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "label_niveau": {
+                                                            "type": "string",
+                                                            "example": "Niveau 1"
+                                                        },
+                                                        "description_niveau": {
+                                                            "type": "string",
+                                                            "example": "Première année"
+                                                        },
+                                                        "code_filiere": {
+                                                            "type": "string",
+                                                            "example": "INFO"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Filières"
+                ],
+                "summary": "Créer une nouvelle filière",
+                "operationId": "storeFiliere",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_filiere",
+                                    "label_filiere",
+                                    "description_filiere"
+                                ],
+                                "properties": {
+                                    "code_filiere": {
+                                        "type": "string"
+                                    },
+                                    "label_filiere": {
+                                        "type": "string"
+                                    },
+                                    "description_filiere": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Filière créée"
+                    },
+                    "422": {
+                        "description": "Erreur validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/filieres/{codeFiliere}": {
+            "get": {
+                "tags": [
+                    "Filières"
+                ],
+                "summary": "Obtenir une filière par son code",
+                "description": "Retourne les informations d'une filière spécifique",
+                "operationId": "showFiliere",
+                "parameters": [
+                    {
+                        "name": "codeFiliere",
+                        "in": "path",
+                        "description": "Code unique de la filière",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "INFO-001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filière trouvée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code_filiere": {
+                                            "type": "string"
+                                        },
+                                        "label_filiere": {
+                                            "type": "string"
+                                        },
+                                        "description_filiere": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "niveaux": {
+                                            "description": "Liste des niveaux associés à la filière",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "code_niveau": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "label_niveau": {
+                                                        "type": "string",
+                                                        "example": "Niveau 1"
+                                                    },
+                                                    "description_niveau": {
+                                                        "type": "string",
+                                                        "example": "Première année"
+                                                    },
+                                                    "code_filiere": {
+                                                        "type": "string",
+                                                        "example": "INFO"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Filière non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Filières"
+                ],
+                "summary": "Mettre à jour une filière",
+                "description": "Met à jour les informations d'une filière existante",
+                "operationId": "updateFiliere",
+                "parameters": [
+                    {
+                        "name": "codeFiliere",
+                        "in": "path",
+                        "description": "Code unique de la filière",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "INFO-001"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_filiere",
+                                    "label_filiere",
+                                    "description_filiere"
+                                ],
+                                "properties": {
+                                    "code_filiere": {
+                                        "type": "string"
+                                    },
+                                    "label_filiere": {
+                                        "type": "string"
+                                    },
+                                    "description_filiere": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Filière mise à jour"
+                    },
+                    "404": {
+                        "description": "Filière non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Filières"
+                ],
+                "summary": "Supprimer une filière",
+                "operationId": "deleteFiliere",
+                "parameters": [
+                    {
+                        "name": "codeFiliere",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "INFO-001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filière supprimée"
+                    },
+                    "404": {
+                        "description": "Filière non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/niveaux": {
+            "get": {
+                "tags": [
+                    "Niveaux"
+                ],
+                "summary": "Obtenir la liste des niveaux",
+                "description": "Retourne la liste de tous les niveaux avec leurs UE associées",
+                "operationId": "getNiveauxList",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code_niveau": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "label_niveau": {
+                                                "type": "string",
+                                                "example": "Niveau 1"
+                                            },
+                                            "description_niveau": {
+                                                "type": "string",
+                                                "example": "Premier niveau d'étude"
+                                            },
+                                            "code_filiere": {
+                                                "type": "string",
+                                                "example": "INFO-001"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "ue": {
+                                                "description": "Liste des UE associées à ce niveau",
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "code_ue": {
+                                                            "type": "string",
+                                                            "example": "UE-101"
+                                                        },
+                                                        "label_ue": {
+                                                            "type": "string",
+                                                            "example": "Programmation"
+                                                        },
+                                                        "description_ue": {
+                                                            "type": "string",
+                                                            "example": "Introduction à la programmation"
+                                                        },
+                                                        "code_niveau": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Niveaux"
+                ],
+                "summary": "Créer un niveau",
+                "operationId": "storeNiveau",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_filiere",
+                                    "label_niveau",
+                                    "description_niveau"
+                                ],
+                                "properties": {
+                                    "code_filiere": {
+                                        "type": "string"
+                                    },
+                                    "label_niveau": {
+                                        "type": "string"
+                                    },
+                                    "description_niveau": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Niveau créé"
+                    },
+                    "422": {
+                        "description": "Erreur validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/niveaux/{codeNiveau}": {
+            "get": {
+                "tags": [
+                    "Niveaux"
+                ],
+                "summary": "Obtenir une niveau par son code",
+                "description": "Retourne les informations d'une niveau spécifique",
+                "operationId": "showNiveau",
+                "parameters": [
+                    {
+                        "name": "codeNiveau",
+                        "in": "path",
+                        "description": "Code unique de la niveau",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Niveau trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code_niveau": {
+                                            "type": "integer"
+                                        },
+                                        "label_niveau": {
+                                            "type": "string"
+                                        },
+                                        "description_niveau": {
+                                            "type": "string"
+                                        },
+                                        "code_filiere": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "ue": {
+                                            "description": "Liste des UE associées à ce niveau",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "code_ue": {
+                                                        "type": "string",
+                                                        "example": "UE-101"
+                                                    },
+                                                    "label_ue": {
+                                                        "type": "string",
+                                                        "example": "Programmation"
+                                                    },
+                                                    "description_ue": {
+                                                        "type": "string",
+                                                        "example": "Introduction à la programmation"
+                                                    },
+                                                    "code_niveau": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Niveau non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Niveaux"
+                ],
+                "summary": "Mettre à jour un niveau",
+                "description": "Met à jour les informations d'une niveau existant",
+                "operationId": "updateNiveau",
+                "parameters": [
+                    {
+                        "name": "codeNiveau",
+                        "in": "path",
+                        "description": "Code unique du niveau",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_filiere",
+                                    "label_filiere",
+                                    "description_filiere"
+                                ],
+                                "properties": {
+                                    "code_filiere": {
+                                        "type": "string"
+                                    },
+                                    "label_niveau": {
+                                        "type": "string"
+                                    },
+                                    "description_niveau": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Niveau mise à jour"
+                    },
+                    "404": {
+                        "description": "Niveau non trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Niveaux"
+                ],
+                "summary": "Supprimer un niveau",
+                "operationId": "deleteNiveau",
+                "parameters": [
+                    {
+                        "name": "codeNiveau",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Niveau supprimée"
+                    },
+                    "404": {
+                        "description": "Niveau non trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/personnels": {
+            "get": {
+                "tags": [
+                    "Personnel"
+                ],
+                "summary": "Obtenir la liste des personnels",
+                "description": "Retourne la liste de tous les personnels",
+                "operationId": "getPersonnelsList",
+                "responses": {
+                    "200": {
+                        "description": "Liste récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code_personnel": {
+                                                "type": "string",
+                                                "example": "PER-001"
+                                            },
+                                            "nom_personnel": {
+                                                "type": "string",
+                                                "example": "Doe"
+                                            },
+                                            "prenom_personnel": {
+                                                "type": "string",
+                                                "example": "John"
+                                            },
+                                            "sexe_personnel": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "M",
+                                                    "F"
+                                                ],
+                                                "example": "M"
+                                            },
+                                            "phone_personnel": {
+                                                "type": "string",
+                                                "example": "699123456"
+                                            },
+                                            "login_personnel": {
+                                                "type": "string",
+                                                "example": "jdoe"
+                                            },
+                                            "type_personnel": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ENSEIGNANT",
+                                                    "RESPONSABLE_ACADEMIQUE",
+                                                    "RESPONSABLE_DISCIPLINE"
+                                                ],
+                                                "example": "ENSEIGNANT"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Personnel"
+                ],
+                "summary": "Créer un personnel",
+                "operationId": "storePersonnel",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code_personnel": {
+                                        "type": "string",
+                                        "example": "PER-001"
+                                    },
+                                    "nom_personnel": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "prenom_personnel": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "sexe_personnel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "M",
+                                            "F"
+                                        ],
+                                        "example": "M"
+                                    },
+                                    "phone_personnel": {
+                                        "type": "string",
+                                        "example": "699123456"
+                                    },
+                                    "login_personnel": {
+                                        "type": "string",
+                                        "example": "jdoe"
+                                    },
+                                    "password_personnel": {
+                                        "type": "string",
+                                        "example": "888rdqdf"
+                                    },
+                                    "type_personnel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "ENSEIGNANT",
+                                            "RESPONSABLE_ACADEMIQUE",
+                                            "RESPONSABLE_DISCIPLINE"
+                                        ],
+                                        "example": "ENSEIGNANT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Personnel créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/personnels/{code_personnel}": {
+            "get": {
+                "tags": [
+                    "Personnel"
+                ],
+                "summary": "Afficher un personnel",
+                "operationId": "showPersonnel",
+                "parameters": [
+                    {
+                        "name": "code_personnel",
+                        "in": "path",
+                        "description": "Code du personnel",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personnel trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code_personnel": {
+                                            "type": "string",
+                                            "example": "PER-001"
+                                        },
+                                        "nom_personnel": {
+                                            "type": "string",
+                                            "example": "Doe"
+                                        },
+                                        "prenom_personnel": {
+                                            "type": "string",
+                                            "example": "John"
+                                        },
+                                        "sexe_personnel": {
+                                            "type": "string",
+                                            "enum": [
+                                                "M",
+                                                "F"
+                                            ],
+                                            "example": "M"
+                                        },
+                                        "phone_personnel": {
+                                            "type": "string",
+                                            "example": "699123456"
+                                        },
+                                        "login_personnel": {
+                                            "type": "string",
+                                            "example": "jdoe"
+                                        },
+                                        "type_personnel": {
+                                            "type": "string",
+                                            "enum": [
+                                                "ENSEIGNANT",
+                                                "RESPONSABLE_ACADEMIQUE",
+                                                "RESPONSABLE_DISCIPLINE"
+                                            ],
+                                            "example": "ENSEIGNANT"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Personnel"
+                ],
+                "summary": "Modifier un personnel",
+                "operationId": "updatePersonnel",
+                "parameters": [
+                    {
+                        "name": "code_personnel",
+                        "in": "path",
+                        "description": "Code du personnel",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code_personnel": {
+                                        "type": "string",
+                                        "example": "PER-001"
+                                    },
+                                    "nom_personnel": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "prenom_personnel": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "sexe_personnel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "M",
+                                            "F"
+                                        ],
+                                        "example": "M"
+                                    },
+                                    "phone_personnel": {
+                                        "type": "string",
+                                        "example": "699123456"
+                                    },
+                                    "login_personnel": {
+                                        "type": "string",
+                                        "example": "jdoe"
+                                    },
+                                    "password_personnel": {
+                                        "type": "string",
+                                        "example": "888rdqdf"
+                                    },
+                                    "type_personnel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "ENSEIGNANT",
+                                            "RESPONSABLE_ACADEMIQUE",
+                                            "RESPONSABLE_DISCIPLINE"
+                                        ],
+                                        "example": "ENSEIGNANT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Personnel mis à jour"
+                    },
+                    "404": {
+                        "description": "Personnel non trouvé"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Personnel"
+                ],
+                "summary": "Supprimer un personnel",
+                "operationId": "deletePersonnel",
+                "parameters": [
+                    {
+                        "name": "code_personnel",
+                        "in": "path",
+                        "description": "Code du personnel",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Supprimé avec succès"
+                    }
+                }
+            }
+        },
+        "/api/programmations": {
+            "get": {
+                "tags": [
+                    "Programmation"
+                ],
+                "summary": "Obtenir toutes les programmations",
+                "operationId": "a5704a3884f06f5b6e16c4ea6395ba3a",
+                "responses": {
+                    "200": {
+                        "description": "Liste des programmations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "num_salle": {
+                                                "type": "integer",
+                                                "example": 101
+                                            },
+                                            "code_ec": {
+                                                "type": "integer",
+                                                "example": 12
+                                            },
+                                            "code_personnel": {
+                                                "type": "string",
+                                                "example": "P001"
+                                            },
+                                            "nbre_heures": {
+                                                "type": "integer",
+                                                "example": 4
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-02-20"
+                                            },
+                                            "heure_debut": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "example": "08:30"
+                                            },
+                                            "heure_fin": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "example": "12:30"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "PLANIFIÉ"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Programmation"
+                ],
+                "summary": "Créer une programmation",
+                "operationId": "fcd5b7e9f4277214c7e3290357fa93e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "num_salle": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "code_ec": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "code_personnel": {
+                                        "type": "string",
+                                        "example": "P001"
+                                    },
+                                    "nbre_heures": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-02-20"
+                                    },
+                                    "heure_debut": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "08:00"
+                                    },
+                                    "heure_fin": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "12:00"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "PLANIFIÉ"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Programmation créée"
+                    }
+                }
+            }
+        },
+        "/api/programmations/{id}": {
+            "get": {
+                "tags": [
+                    "Programmation"
+                ],
+                "summary": "Afficher une programmation",
+                "operationId": "c70e64f989c6b13c7a58acd22e766d20",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la programmation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la programmation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "num_salle": {
+                                            "type": "integer",
+                                            "example": 101
+                                        },
+                                        "code_ec": {
+                                            "type": "integer",
+                                            "example": 12
+                                        },
+                                        "code_personnel": {
+                                            "type": "string",
+                                            "example": "P001"
+                                        },
+                                        "nbre_heures": {
+                                            "type": "integer",
+                                            "example": 4
+                                        },
+                                        "date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2025-02-20"
+                                        },
+                                        "heure_debut": {
+                                            "type": "string",
+                                            "example": "08:00"
+                                        },
+                                        "heure_fin": {
+                                            "type": "string",
+                                            "example": "12:00"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "PLANIFIÉ"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Programmation non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Programmation"
+                ],
+                "summary": "Mettre à jour une programmation",
+                "operationId": "a5e578f8d28f4395a678d3701ee790a7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la programmation",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "num_salle": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "code_ec": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "code_personnel": {
+                                        "type": "string",
+                                        "example": "P001"
+                                    },
+                                    "nbre_heures": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "2025-02-20"
+                                    },
+                                    "heure_debut": {
+                                        "type": "string",
+                                        "example": "09:00"
+                                    },
+                                    "heure_fin": {
+                                        "type": "string",
+                                        "example": "13:00"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "REPORTÉ"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Programmation mise à jour"
+                    },
+                    "404": {
+                        "description": "Non trouvée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Programmation"
+                ],
+                "summary": "Supprimer une programmation",
+                "operationId": "f9b3e19bf0f4f1709bb713628fce9ddb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la programmation",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Programmation supprimée"
+                    },
+                    "404": {
+                        "description": "Non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/salles": {
+            "get": {
+                "tags": [
+                    "Salles"
+                ],
+                "summary": "Obtenir la liste des salles",
+                "description": "Retourne la liste de toutes les salles",
+                "operationId": "getSallesList",
+                "responses": {
+                    "200": {
+                        "description": "Liste récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "num_salle": {
+                                                "type": "integer",
+                                                "example": 101
+                                            },
+                                            "contenance": {
+                                                "type": "integer",
+                                                "example": 50
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "LIBRE"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Salles"
+                ],
+                "summary": "Créer une nouvelle salle",
+                "description": "Crée une salle et retourne un message de confirmation",
+                "operationId": "storeSalle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "num_salle",
+                                    "contenance",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "num_salle": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "contenance": {
+                                        "type": "integer",
+                                        "example": 50
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "OCCUPEE",
+                                            "LIBRE"
+                                        ],
+                                        "example": "LIBRE"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Salle créée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle créée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/salles/{num_salle}": {
+            "get": {
+                "tags": [
+                    "Salles"
+                ],
+                "summary": "Afficher une salle spécifique",
+                "description": "Retourne les détails d'une salle",
+                "operationId": "getSalleByNum",
+                "parameters": [
+                    {
+                        "name": "num_salle",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 101
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "num_salle": {
+                                            "type": "integer",
+                                            "example": 101
+                                        },
+                                        "contenance": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "LIBRE"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Salle non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Salles"
+                ],
+                "summary": "Mettre à jour une salle",
+                "description": "Met à jour les informations d'une salle",
+                "operationId": "updateSalle",
+                "parameters": [
+                    {
+                        "name": "num_salle",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 101
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "contenance": {
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "OCCUPEE",
+                                            "LIBRE"
+                                        ],
+                                        "example": "OCCUPEE"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salle mise à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Salle non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Salles"
+                ],
+                "summary": "Supprimer une salle",
+                "description": "Supprime une salle par son numéro",
+                "operationId": "deleteSalle",
+                "parameters": [
+                    {
+                        "name": "num_salle",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 101
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "Salle non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/ue": {
+            "get": {
+                "tags": [
+                    "UEs"
+                ],
+                "summary": "Obtenir la liste des UEs",
+                "description": "Retourne la liste de toutes les UEs avec leurs EC associées",
+                "operationId": "getUEList",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code_ue": {
+                                                "type": "string",
+                                                "example": "UE101"
+                                            },
+                                            "label_ue": {
+                                                "type": "string",
+                                                "example": "Algorithmes"
+                                            },
+                                            "description_ue": {
+                                                "type": "string",
+                                                "example": "Fondamentaux des algorithmes"
+                                            },
+                                            "code_niveau": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "ec": {
+                                                "description": "Liste des EC associées à cette UE",
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "code_ec": {
+                                                            "type": "integer",
+                                                            "example": "1"
+                                                        },
+                                                        "label_ec": {
+                                                            "type": "string",
+                                                            "example": "Programmation"
+                                                        },
+                                                        "description_ec": {
+                                                            "type": "string",
+                                                            "example": "Introduction à la programmation"
+                                                        },
+                                                        "nb_heures_ec": {
+                                                            "type": "integer",
+                                                            "example": 30
+                                                        },
+                                                        "nb_credits_ec": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "code_ue": {
+                                                            "type": "string",
+                                                            "example": "UE101"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UEs"
+                ],
+                "summary": "Créer une nouvelle UE",
+                "description": "Crée une nouvelle UE dans la base de données",
+                "operationId": "createUE",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_ue",
+                                    "label_ue",
+                                    "description_ue",
+                                    "code_niveau"
+                                ],
+                                "properties": {
+                                    "code_ue": {
+                                        "type": "string",
+                                        "example": "UE101"
+                                    },
+                                    "label_ue": {
+                                        "type": "string",
+                                        "example": "Mathématiques"
+                                    },
+                                    "description_ue": {
+                                        "type": "string",
+                                        "example": "Analyse et algèbre"
+                                    },
+                                    "code_niveau": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "UE créée avec succès"
+                    }
+                }
+            }
+        },
+        "/api/ue/{codeUE}": {
+            "get": {
+                "tags": [
+                    "UEs"
+                ],
+                "summary": "Afficher une UE spécifique",
+                "description": "Retourne une UE par son code",
+                "operationId": "getUEShow",
+                "parameters": [
+                    {
+                        "name": "codeUE",
+                        "in": "path",
+                        "description": "Code de l'UE",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'UE"
+                    },
+                    "404": {
+                        "description": "UE non trouvée"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UEs"
+                ],
+                "summary": "Mettre à jour une UE",
+                "description": "Modifie une UE existante",
+                "operationId": "updateUE",
+                "parameters": [
+                    {
+                        "name": "codeUE",
+                        "in": "path",
+                        "description": "Code de l'UE",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code_ue": {
+                                        "type": "string",
+                                        "example": "=MA"
+                                    },
+                                    "label_ue": {
+                                        "type": "string",
+                                        "example": "Maths avancées"
+                                    },
+                                    "description_ue": {
+                                        "type": "string",
+                                        "example": "Analyse avancée"
+                                    },
+                                    "code_niveau": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UE mise à jour avec succès"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UEs"
+                ],
+                "summary": "Supprimer une UE",
+                "description": "Supprime une UE grâce à son code",
+                "operationId": "deleteUE",
+                "parameters": [
+                    {
+                        "name": "codeUE",
+                        "in": "path",
+                        "description": "Code de l'UE",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "UE supprimée avec succès"
+                    },
+                    "404": {
+                        "description": "UE non trouvée"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Filières",
+            "description": "Endpoints pour la gestion des filières"
+        },
+        {
+            "name": "Niveaux",
+            "description": "Endpoints pour la gestion des niveaux"
+        },
+        {
+            "name": "UEs",
+            "description": "Endpoints pour la gestion des UEs"
+        },
+        {
+            "name": "ECs",
+            "description": "Endpoints pour la gestion des ECs"
+        },
+        {
+            "name": "Personnel",
+            "description": "Endpoints pour la gestion du personnel"
+        },
+        {
+            "name": "Salles",
+            "description": "Endpoints pour la gestion des salles"
+        },
+        {
+            "name": "Programmation",
+            "description": "Programmation"
+        }
+    ]
+}
